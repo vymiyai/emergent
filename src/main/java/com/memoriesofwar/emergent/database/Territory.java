@@ -1,28 +1,38 @@
-package com.memoriesofwar.emergent.territories;
+package com.memoriesofwar.emergent.database;
 
-import com.memoriesofwar.emergent.factions.Faction;
-
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Territory {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 
+    @ManyToOne
     private Faction originalFaction;
 
+    @ManyToOne
     private Faction faction;
 
-    private List<String> links;
+    @ManyToMany
+    private List<Territory> links;
 
     private boolean isPort;
 
-    public Territory(String name, Faction originalFaction, List<String> links, boolean isPort) {
+    public Territory() {}
+
+    public Territory(String name, Faction originalFaction, boolean isPort) {
         this.name = name;
         this.originalFaction = originalFaction;
         this.faction = originalFaction;
-        this.links = links;
         this.isPort = isPort;
     }
+
+    public Long getId() { return id; }
 
     public String getName() {
         return name;
@@ -40,7 +50,9 @@ public class Territory {
         this.faction = faction;
     }
 
-    public List<String> getLinks() { return links; }
+    public List<Territory> getLinks() { return links; }
+
+    public void setLinks(List<Territory> links) { this.links = links; }
 
     public boolean isPort() { return isPort; }
 
