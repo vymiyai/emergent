@@ -1,6 +1,7 @@
 package com.memoriesofwar.emergent.database;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -52,7 +53,7 @@ public class Territory {
 
     public List<Territory> getLinks() { return links; }
 
-    public void setLinks(List<Territory> links) { this.links = links; }
+    public void setLinks(Territory... links) { this.links = Arrays.asList(links); }
 
     public boolean isPort() { return isPort; }
 

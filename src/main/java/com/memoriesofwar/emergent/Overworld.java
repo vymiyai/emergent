@@ -139,7 +139,7 @@ public class Overworld {
         Territory manitoba = new Territory(MANITOBA, ur, false);
         Territory alberta = new Territory(ALBERTA, ur, false);
         Territory britishColumbia = new Territory(BRITISH_COLUMBIA, ur, false);
-        Territory canadianArtic = new Territory(CANADIAN_ARCTIC, ur, false);
+        Territory canadianArctic = new Territory(CANADIAN_ARCTIC, ur, false);
         Territory yukon = new Territory(YUKON, ur, false);
         Territory alaska = new Territory(ALASKA, ur, false);
 
@@ -157,7 +157,7 @@ public class Overworld {
         Territory centralAfrica = new Territory(CENTRAL_AFRICA, aw, false);
         Territory nigeria = new Territory(NIGERIA, aw, false);
         Territory westAfrica = new Territory(WEST_AFRICA, aw, false);
-        Territory morocoo = new Territory(MOROCCO, aw, false);
+        Territory morocco = new Territory(MOROCCO, aw, false);
         Territory algeria = new Territory(ALGERIA, aw, false);
         Territory libya = new Territory(LIBYA, aw, false);
         Territory egypt = new Territory(EGYPT, aw, false);
@@ -169,7 +169,7 @@ public class Overworld {
         Territory afghanistan = new Territory(AFGHANISTAN, aw, false);
 
         Territory saoPaulo = new Territory(SAO_PAULO, lj, true);
-        Territory chila = new Territory(CHILE, lj, false);
+        Territory chile = new Territory(CHILE, lj, false);
         Territory malvinas = new Territory(MALVINAS, lj, false);
         Territory fireland = new Territory(FIRELAND, lj, false);
         Territory patagonia = new Territory(PATAGONIA, lj, false);
@@ -289,7 +289,7 @@ public class Overworld {
             manitoba,
             alberta,
             britishColumbia,
-            canadianArtic,
+            canadianArctic,
             yukon,
             alaska,
 
@@ -307,7 +307,7 @@ public class Overworld {
             centralAfrica,
             nigeria,
             westAfrica,
-            morocoo,
+            morocco,
             algeria,
             libya,
             egypt,
@@ -319,7 +319,7 @@ public class Overworld {
             afghanistan,
 
             saoPaulo,
-            chila,
+            chile,
             malvinas,
             fireland,
             patagonia,
@@ -350,22 +350,158 @@ public class Overworld {
             territoryRepository.save(territory);
         }
 
-        /*
+        newZealand.setLinks(eastAustralia);
+        eastAustralia.setLinks(westAustralia, newZealand, papuaNewGuinea, chile, midAtlantic, westMagadan, bangladesh, benelux, saoPaulo, westCongo);
+        westAustralia.setLinks(eastAustralia,timor);
+        iceland.setLinks(greenland, scotland, ireland);
+        scotland.setLinks(iceland, ireland, england, norway);
+        ireland.setLinks(iceland, england, scotland);
+        england.setLinks(ireland, scotland, northernFrance);
+        northernFrance.setLinks(england, benelux, westernGermany, italy, southernFrance);
+        southernFrance.setLinks(northernFrance, spain, italy);
+        spain.setLinks(morocco, portugal, southernFrance);
+        portugal.setLinks(spain);
+        italy.setLinks(southernFrance, northernFrance, westernGermany, austriaHungary, balkan, libya);
+        denmark.setLinks(westernGermany, easternGermany, norway, sweden);
+        norway.setLinks(scotland, denmark, sweden, finland);
+        sweden.setLinks(denmark, norway, finland);
+        finland.setLinks(norway, sweden, balticStates, stPetersburg);
+        balticStates.setLinks(finland, stPetersburg, belarus, poland);
+        poland.setLinks(balticStates, belarus, ukraine, austriaHungary, easternGermany);
+        westernGermany.setLinks(denmark, easternGermany, benelux, northernFrance, italy, austriaHungary);
+        easternGermany.setLinks(denmark, westernGermany, austriaHungary, poland);
+        austriaHungary.setLinks(poland, easternGermany, westernGermany, italy, balkan, southEastEurope, ukraine);
+        benelux.setLinks(northernFrance, westernGermany, eastAustralia, bangladesh, westMagadan, westCongo, midAtlantic, saoPaulo);
+        balkan.setLinks(italy, austriaHungary, southEastEurope, greece);
+        greece.setLinks(turkey, balkan, southEastEurope);
+        southEastEurope.setLinks(ukraine, austriaHungary, balkan, greece, turkey);
 
-        //Territory newZealand = new Territory(NEW_ZEALAND, ea, Arrays.asList(EAST_AUSTRALIA), false);
-        //Territory eastAustralia = new Territory(EAST_AUSTRALIA, ea, Arrays.asList(WEST_AUSTRALIA, NEW_ZEALAND, PAPUA_NEW_GUINEA, CHILE, MID_ATLANTIC, WEST_MAGADAN, BANGLADESH, BENELUX, SAO_PAULO, WEST_CONGO), true);
-        //Territory westAustralia = new Territory(WEST_AUSTRALIA, ea, Arrays.asList(EAST_AUSTRALIA, TIMOR), false);
+        papuaNewGuinea.setLinks(eastAustralia, sulawesi);
+        timor.setLinks(westAustralia, sulawesi, indonesia);
+        indonesia.setLinks(singapore, southAfrica, borneo, timor);
+        borneo.setLinks(malaysia, indonesia);
+        sulawesi.setLinks(philippines, papuaNewGuinea, timor);
+        malaysia.setLinks(singapore, borneo, philippines);
+        philippines.setLinks(malaysia, sulawesi, southEastChina);
+        singapore.setLinks(thailand, indonesia, malaysia);
+        thailand.setLinks(singapore, vietnam, burma);
+        southEastChina.setLinks(himalayas, centralChina, shanghai, taiwan, philippines, vietnam, burma, bangladesh);
+        taiwan.setLinks(southEastChina, shanghai);
+        shanghai.setLinks(southEastChina, taiwan, centralChina, beijing);
+        beijing.setLinks(korea, shanghai, mongolia, khabarovsk, transBaikal);
+        korea.setLinks(japan, beijing);
+        japan.setLinks(korea, kamchatka, hawaii);
+        centralChina.setLinks(himalayas, mongolia, shanghai, southEastChina);
+        mongolia.setLinks(himalayas, centralChina, beijing, transBaikal, eastKazakhstan);
+        himalayas.setLinks(eastKazakhstan, tianShan, afghanistan, india, nepal, bangladesh, shanghai, centralChina, mongolia);
+        bangladesh.setLinks(burma, southEastChina, himalayas, nepal, india, eastAustralia, midAtlantic, westMagadan, benelux, saoPaulo, westCongo);
+        nepal.setLinks(bangladesh, india, himalayas);
+        india.setLinks(sriLanka, persia, afghanistan, himalayas, nepal, bangladesh);
+        sriLanka.setLinks(india);
+        burma.setLinks(bangladesh, southEastChina, thailand, vietnam);
+        vietnam.setLinks(thailand, burma, southEastChina);
 
-        //Territory japan = new Territory(JAPAN, se, Arrays.asList(HAWAII, KOREA, KAMCHATKA), false);
-        //Territory korea = new Territory(KOREA, se, Arrays.asList(JAPAN, BEIJING), false);
+        malvinas.setLinks(patagonia);
+        patagonia.setLinks(buenosAires, chile);
+        chile.setLinks(eastAustralia, bolivia, buenosAires, patagonia, fireland);
+        fireland.setLinks(chile);
+        uruguay.setLinks(buenosAires, saoPaulo);
+        saoPaulo.setLinks(uruguay, buenosAires, paraguay, brasilia, rioDeJaneiro, benelux, eastAustralia, westCongo, westMagadan, bangladesh, midAtlantic);
+        buenosAires.setLinks(patagonia, chile, bolivia, paraguay, saoPaulo, uruguay);
+        paraguay.setLinks(buenosAires, bolivia, brasilia, saoPaulo);
+        brasilia.setLinks(paraguay, bolivia, amazonia, recife, rioDeJaneiro, saoPaulo);
+        rioDeJaneiro.setLinks(saoPaulo, brasilia, recife);
+        recife.setLinks(ivoryCoast, amazonia, brasilia, rioDeJaneiro);
+        bolivia.setLinks(chile, peru, amazonia, brasilia, paraguay, buenosAires);
+        peru.setLinks(ecuador, colombia, amazonia, bolivia);
+        ecuador.setLinks(peru, colombia);
+        colombia.setLinks(ecuador, peru, centralAmerica, venezuela, amazonia);
+        venezuela.setLinks(caribbean, colombia, guyana, amazonia);
+        guyana.setLinks(venezuela, amazonia);
+        amazonia.setLinks(guyana, venezuela, colombia, peru, bolivia, brasilia, recife);
+        centralAmerica.setLinks(southMexico, colombia, cuba);
+        caribbean.setLinks(cuba, venezuela);
+        cuba.setLinks(coastalSoutheast, caribbean, centralAmerica);
+        southMexico.setLinks(northMexico, centralAmerica);
+        northMexico.setLinks(southMexico, pacificSouthwest, southernPlains);
 
-        Territory japan = new Territory(JAPAN, se, false);
-        Territory korea = new Territory(KOREA, se, false);
+        hawaii.setLinks(japan, pacificSouthwest);
+        greenland.setLinks(iceland, newFoundland, canadianArctic);
+        pacificSouthwest.setLinks(hawaii, pacificNorthwest, coloradoPlateau, southernPlains, northMexico);
+        southernPlains.setLinks(northMexico, pacificSouthwest, coloradoPlateau, westernInterior, gulfCoast);
+        gulfCoast.setLinks(southernPlains, westernInterior, coastalSoutheast);
+        coastalSoutheast.setLinks(cuba, gulfCoast, westernInterior, appalachianBasin);
+        appalachianBasin.setLinks(coastalSoutheast, westernInterior, greatLakes, midAtlantic);
+        midAtlantic.setLinks(appalachianBasin, greatLakes, ontario, quebec, newEngland, benelux, eastAustralia, westCongo, westMagadan, saoPaulo, bangladesh);
+        newEngland.setLinks(midAtlantic, quebec);
+        quebec.setLinks(newFoundland, newEngland, midAtlantic, ontario, canadianArctic);
+        greatLakes.setLinks(midAtlantic, appalachianBasin, westernInterior, northernPlains, ontario);
+        ontario.setLinks(manitoba, greatLakes, midAtlantic, quebec);
+        westernInterior.setLinks(southernPlains, gulfCoast, coastalSoutheast, appalachianBasin, greatLakes, northernPlains, coloradoPlateau);
+        coloradoPlateau.setLinks(pacificNorthwest, pacificSouthwest, southernPlains, westernInterior, northernPlains, northernRockies, britishColumbia);
+        pacificNorthwest.setLinks(pacificSouthwest, britishColumbia, northernRockies);
+        northernPlains.setLinks(westernInterior, greatLakes, manitoba, alberta, northernRockies, coloradoPlateau);
+        northernRockies.setLinks(britishColumbia, alberta, northernPlains, coloradoPlateau);
+        manitoba.setLinks(ontario, northernPlains, alberta, canadianArctic);
+        alberta.setLinks(manitoba, northernPlains, northernRockies, britishColumbia, yukon, canadianArctic);
+        britishColumbia.setLinks(pacificNorthwest, coloradoPlateau, northernRockies, alberta, yukon);
+        canadianArctic.setLinks(yukon, alberta, manitoba, greenland, quebec);
+        yukon.setLinks(alaska, britishColumbia, alberta, canadianArctic);
+        alaska.setLinks(kamchatka, yukon);
+        newFoundland.setLinks(greenland, quebec);
 
-        List<Territory> originalSETerritories = Arrays.asList(japan, korea);
-        territories = new ArrayList<>();
-        territories.addAll(originalSETerritories);
-        */
+        ivoryCoast.setLinks(recife, westAfrica, nigeria);
+        westAfrica.setLinks(morocco, algeria, centralAfrica, nigeria, ivoryCoast);
+        morocco.setLinks(spain, westAfrica, algeria);
+        algeria.setLinks(morocco, westAfrica, centralAfrica, libya);
+        libya.setLinks(italy, algeria, centralAfrica, egypt, sudan);
+        egypt.setLinks(libya, sudan, arabia, middleEast);
+        centralAfrica.setLinks(libya, egypt, sudan, centralCongo, westCongo, nigeria, westAfrica);
+        nigeria.setLinks(ivoryCoast, westAfrica, centralAfrica, westCongo);
+        westCongo.setLinks(nigeria, centralAfrica, centralCongo, benelux, eastAustralia, westMagadan, bangladesh, saoPaulo, midAtlantic);
+        sudan.setLinks(egypt, libya, centralAfrica, centralCongo, kenya, somalia);
+        somalia.setLinks(arabia, sudan, kenya);
+        centralCongo.setLinks(centralAfrica, westCongo, namibia, rhodesia, kenya, sudan);
+        kenya.setLinks(somalia, sudan, centralCongo, rhodesia, mozambique);
+        namibia.setLinks(southAfrica, rhodesia, centralCongo);
+        rhodesia.setLinks(centralCongo, namibia, southAfrica, mozambique, kenya);
+        mozambique.setLinks(madagascar, kenya, rhodesia, southAfrica);
+        madagascar.setLinks(mozambique);
+        southAfrica.setLinks(indonesia, namibia, rhodesia, mozambique);
+        arabia.setLinks(somalia, egypt, middleEast);
+        middleEast.setLinks(egypt, arabia, persia, turkey);
+        turkey.setLinks(greece, southEastEurope, southCaucasus, persia, middleEast);
+        southCaucasus.setLinks(northCaucasus, turkey, persia);
+        persia.setLinks(turkey, southCaucasus, karakum, afghanistan, india, middleEast);
+        afghanistan.setLinks(tianShan, karakum, persia, india, himalayas);
+
+        kamchatka.setLinks(japan, alaska, eastMagadan);
+        eastMagadan.setLinks(kamchatka, westMagadan, sakha);
+        westMagadan.setLinks(eastMagadan, sakha, khabarovsk, benelux, eastAustralia, bangladesh, westCongo, midAtlantic, saoPaulo);
+        khabarovsk.setLinks(beijing, transBaikal, yakutsk, sakha, westMagadan);
+        transBaikal.setLinks(khabarovsk, beijing, mongolia, eastKazakhstan, southernSiberia, eastSiberia, yakutsk);
+        sakha.setLinks(eastMagadan, westMagadan, khabarovsk, yakutsk);
+        yakutsk.setLinks(northernSiberia, westSiberia, eastSiberia, transBaikal, khabarovsk, sakha);
+        eastSiberia.setLinks(westSiberia, southernSiberia, transBaikal, yakutsk);
+        northernSiberia.setLinks(westSiberia, yakutsk);
+        westSiberia.setLinks(northernSiberia, yakutsk, westSiberia, southernSiberia, northUrals);
+        southernSiberia.setLinks(westSiberia, eastSiberia, transBaikal, eastKazakhstan, westKazakhstan, northUrals, centralUrals);
+        eastKazakhstan.setLinks(southernSiberia, transBaikal, mongolia, himalayas, tianShan, karakum, westKazakhstan);
+        westKazakhstan.setLinks(northCaucasus, centralUrals, southernSiberia, eastKazakhstan, karakum);
+        tianShan.setLinks(eastKazakhstan, himalayas, afghanistan, karakum);
+        karakum.setLinks(persia, afghanistan, tianShan, eastKazakhstan, westKazakhstan);
+        northUrals.setLinks(arkhangelsk, centralUrals, southernSiberia, westSiberia);
+        centralUrals.setLinks(northUrals, arkhangelsk, moscow, northCaucasus, westKazakhstan, southernSiberia);
+        northCaucasus.setLinks(southCaucasus, westKazakhstan, centralUrals, moscow, ukraine);
+        moscow.setLinks(arkhangelsk, stPetersburg, belarus, ukraine, northCaucasus, centralUrals);
+        arkhangelsk.setLinks(stPetersburg, moscow, centralUrals, northUrals);
+        stPetersburg.setLinks(finland, balticStates, belarus, moscow, arkhangelsk);
+        belarus.setLinks(stPetersburg, balticStates, poland, ukraine, moscow);
+        ukraine.setLinks(belarus, poland, austriaHungary, southEastEurope, northCaucasus, moscow);
+
+        for(Territory territory : territories) {
+            territoryRepository.save(territory);
+        }
     }
 
     public List<Faction> getFactions() {
