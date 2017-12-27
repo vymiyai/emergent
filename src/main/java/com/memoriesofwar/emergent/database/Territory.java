@@ -1,6 +1,13 @@
 package com.memoriesofwar.emergent.database;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.*;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +26,7 @@ public class Territory {
     @ManyToOne
     private Faction faction;
 
+    @JsonSerialize(using = TerritorySerializer.class)
     @ManyToMany
     private List<Territory> links;
 
@@ -60,5 +68,21 @@ public class Territory {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    private static class TerritorySerializer extends JsonSerializer<List<Territory>> {
+
+        @Override
+        public void serialize(
+                List<Territory> territories,
+                JsonGenerator generator,
+                SerializerProvider provider) throws IOException {
+
+            List<String> names = new ArrayList<>();
+            for (Territory territory : territories) {
+                names.add(territory.getName());
+            }
+            generator.writeObject(names);
+        }
     }
 }

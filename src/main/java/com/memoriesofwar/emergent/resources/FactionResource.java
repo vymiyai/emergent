@@ -24,29 +24,25 @@ public class FactionResource {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Faction> factions() {
+    public List<Faction> getFactions() {
 
         return overworld.getFactions();
     }
 
-    @RequestMapping(value = "/{name}/territories", method = RequestMethod.GET)
-    public List<Territory> territoriesOfFaction(@PathVariable("name") String name) {
+    @RequestMapping(value = "/{factionName}", method = RequestMethod.GET)
+    public List<Faction> getFaction() {
 
-        System.out.println(name);
-
-        Faction faction = overworld.getFactionRepository().findByName(name);
-
-        if(faction == null) {
-            System.out.println("No faction found.");
-            return null;
-        }
-
-        return overworld.getTerritoryRepository().findAllByFaction(faction);
+        return overworld.getFactions();
     }
 
-    @RequestMapping(value = "/names", method = RequestMethod.GET)
-    public List<String> getNamesOfFactions() {
+    @RequestMapping(value = "/{factionName}/territories", method = RequestMethod.GET)
+    public List<Territory> getFactionTerritories(@PathVariable("factionName") String factionName) {
 
-        return ((List<Faction>) overworld.getFactionRepository().findAll()).stream().map(Faction::getName).collect(Collectors.toList());
+        Faction faction = overworld.getFactionRepository().findByName(factionName);
+
+        if(faction == null)
+            return null;
+
+        return overworld.getTerritoryRepository().findAllByFaction(faction);
     }
 }

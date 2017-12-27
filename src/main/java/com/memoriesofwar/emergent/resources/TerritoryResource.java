@@ -1,5 +1,6 @@
 package com.memoriesofwar.emergent.resources;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,23 +28,19 @@ public class TerritoryResource {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Territory> territories() {
+    public List<Territory> getTerritories() {
 
         return overworld.getTerritories();
     }
 
-    @RequestMapping(value = "/{name}/links", method = RequestMethod.GET)
-    public List<String> linksOfTerritory(@PathVariable("name") String name) {
-
-        System.out.println(name);
+    @RequestMapping(value = "/{name}", method = RequestMethod.GET)
+    public Territory getTerritory(@PathVariable("name") String name) {
 
         Territory territory = overworld.getTerritoryRepository().findByName(name);
 
-        if(territory == null) {
-            System.out.println("No territory found.");
+        if(territory == null)
             return null;
-        }
 
-        return territory.getLinks().stream().map(Territory::getName).collect(Collectors.toList());
+        return territory;
     }
 }
