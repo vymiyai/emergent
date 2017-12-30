@@ -32,16 +32,27 @@ public class Territory {
 
     private boolean isPort;
 
+    private boolean isCapital;
+
+    private boolean isInBattle;
+
+    private boolean isOnCooldown;
+
     public Territory() {}
 
-    public Territory(String name, Faction originalFaction, boolean isPort) {
+    public Territory(String name, Faction originalFaction, boolean isPort, boolean isCapital) {
         this.name = name;
         this.originalFaction = originalFaction;
         this.faction = originalFaction;
         this.isPort = isPort;
+        this.isCapital = isCapital;
+        this.isInBattle = false;
+        this.isOnCooldown = false;
     }
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -59,11 +70,37 @@ public class Territory {
         this.faction = faction;
     }
 
-    public List<Territory> getLinks() { return links; }
+    public List<Territory> getLinks() {
+        return links;
+    }
 
-    public void setLinks(Territory... links) { this.links = Arrays.asList(links); }
+    public void setLinks(Territory... links) {
+        this.links = Arrays.asList(links);
+    }
 
-    public boolean isPort() { return isPort; }
+    public boolean isPort() {
+        return isPort;
+    }
+
+    public boolean isCapital() {
+        return isCapital;
+    }
+
+    public boolean isInBattle() {
+        return isInBattle;
+    }
+
+    public void setInBattle(boolean inBattle) {
+        isInBattle = inBattle;
+    }
+
+    public boolean isOnCooldown() {
+        return isOnCooldown;
+    }
+
+    public void setOnCooldown(boolean onCooldown) {
+        isOnCooldown = onCooldown;
+    }
 
     @Override
     public String toString() {

@@ -1,20 +1,14 @@
 package com.memoriesofwar.emergent.resources;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.PathParam;
-
 import com.memoriesofwar.emergent.Overworld;
+import com.memoriesofwar.emergent.database.Territory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.memoriesofwar.emergent.database.Faction;
-import com.memoriesofwar.emergent.database.Territory;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/territories")

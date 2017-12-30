@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,5 +44,30 @@ public class FactionResource {
             return null;
 
         return overworld.getTerritoryRepository().findAllByFaction(faction);
+    }
+
+    @RequestMapping(value = "/{factionName}/territories/neighbors", method = RequestMethod.GET)
+    public List<HashMap> getNeighboringFactionTerritories(@PathVariable("factionName") String factionName) {
+
+        List<Territory> factionTerritories = this.getFactionTerritories(factionName);
+
+        final HashSet<Territory> neighboringTerritorySet = new HashSet<>();
+        final HashSet<Territory> factionTerritoriesSet = new HashSet<>();
+
+        for(Territory territory : factionTerritories) {
+            neighboringTerritorySet.addAll(territory.getLinks());
+            factionTerritoriesSet.add(territory);
+        }
+
+        neighboringTerritorySet.removeAll(factionTerritories);
+
+        return neighboringTerritorySet.stream()
+                .map((n) -> {
+                    HashMap<String, String> neighbor = new HashMap<String, String>();
+                    neighbor.put("name", n.getName());
+                    neighbor.put("isPort", String.valueOf(n.isPort()));
+                    return neighbor;
+                })
+                .collect(Collectors.toList());
     }
 }

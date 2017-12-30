@@ -91,7 +91,7 @@ public class Territories {
     public static String GREAT_LAKES = "Great Lakes";
     public static String NEW_ENGLAND = "New England";
     public static String QUEBEC = "Quebec";
-    public static String NEW_FOUNDLAND = "New Foundland";
+    public static String NEWFOUNDLAND = "Newfoundland";
     public static String GREENLAND = "Greenland";
     public static String ONTARIO = "Ontario";
     public static String MANITOBA = "Manitoba";
