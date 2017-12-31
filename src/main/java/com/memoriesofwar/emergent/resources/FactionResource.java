@@ -3,6 +3,7 @@ package com.memoriesofwar.emergent.resources;
 import com.memoriesofwar.emergent.Overworld;
 import com.memoriesofwar.emergent.database.Faction;
 import com.memoriesofwar.emergent.database.Territory;
+import com.memoriesofwar.emergent.database.TerritoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/factions")
@@ -26,13 +26,13 @@ public class FactionResource {
     @RequestMapping(method = RequestMethod.GET)
     public List<Faction> getFactions() {
 
-        return overworld.getFactions();
+        return (List<Faction>) overworld.getFactionRepository().findAll();
     }
 
     @RequestMapping(value = "/{factionName}", method = RequestMethod.GET)
-    public List<Faction> getFaction() {
+    public Faction getFaction(@PathVariable("factionName") String factionName) {
 
-        return overworld.getFactions();
+        return overworld.getFactionRepository().findByName(factionName);
     }
 
     @RequestMapping(value = "/{factionName}/territories", method = RequestMethod.GET)
@@ -43,13 +43,34 @@ public class FactionResource {
         if(faction == null)
             return null;
 
-        return overworld.getTerritoryRepository().findAllByFaction(faction);
+        return overworld.getTerritoryRepository().findByFaction(faction);
     }
 
     @RequestMapping(value = "/{factionName}/territories/neighbors", method = RequestMethod.GET)
-    public List<HashMap> getNeighboringFactionTerritories(@PathVariable("factionName") String factionName) {
+    public List<Territory> getNeighboringFactionTerritories(@PathVariable("factionName") String factionName) {
 
-        List<Territory> factionTerritories = this.getFactionTerritories(factionName);
+        Faction faction = overworld.getFactionRepository().findByName(factionName);
+
+        if(faction == null)
+            return null;
+
+        return getNeighboringFactionTerritories(overworld.getTerritoryRepository(), faction);
+    }
+
+    @RequestMapping(value = "/{factionName}/territories/number", method = RequestMethod.GET)
+    public Integer getNumberOfFactionTerritories(@PathVariable("factionName") String factionName) {
+
+        Faction faction = overworld.getFactionRepository().findByName(factionName);
+
+        if(faction == null)
+            return null;
+
+        return overworld.getTerritoryRepository().countByFaction(faction);
+    }
+
+    public static List<Territory> getNeighboringFactionTerritories(TerritoryRepository territoryRepository, Faction faction) {
+
+        List<Territory> factionTerritories = territoryRepository.findByFaction(faction);
 
         final HashSet<Territory> neighboringTerritorySet = new HashSet<>();
         final HashSet<Territory> factionTerritoriesSet = new HashSet<>();
@@ -61,13 +82,6 @@ public class FactionResource {
 
         neighboringTerritorySet.removeAll(factionTerritories);
 
-        return neighboringTerritorySet.stream()
-                .map((n) -> {
-                    HashMap<String, String> neighbor = new HashMap<String, String>();
-                    neighbor.put("name", n.getName());
-                    neighbor.put("isPort", String.valueOf(n.isPort()));
-                    return neighbor;
-                })
-                .collect(Collectors.toList());
+        return new ArrayList<>(neighboringTerritorySet);
     }
 }

@@ -14,6 +14,9 @@ import java.util.List;
 @Entity
 public class Territory {
 
+    @Transient
+    public static final int MAX_COOLDOWN = 30;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,7 +39,7 @@ public class Territory {
 
     private boolean isInBattle;
 
-    private boolean isOnCooldown;
+    private int cooldown;
 
     public Territory() {}
 
@@ -47,7 +50,7 @@ public class Territory {
         this.isPort = isPort;
         this.isCapital = isCapital;
         this.isInBattle = false;
-        this.isOnCooldown = false;
+        this.cooldown = 0;
     }
 
     public Long getId() {
@@ -94,12 +97,16 @@ public class Territory {
         isInBattle = inBattle;
     }
 
-    public boolean isOnCooldown() {
-        return isOnCooldown;
+    public int getCooldown() {
+        return cooldown;
     }
 
-    public void setOnCooldown(boolean onCooldown) {
-        isOnCooldown = onCooldown;
+    public void setCooldown(int cooldown) {
+        this.cooldown = cooldown;
+    }
+
+    public boolean isOnCooldown() {
+        return cooldown > 0 ? true : false;
     }
 
     @Override

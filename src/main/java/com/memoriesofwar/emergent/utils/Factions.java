@@ -7,4 +7,11 @@ public class Factions {
     public static String UR = "United Republic";
     public static String AW = "African Warlords";
     public static String SU = "Soviet Union";
+
+    public static String _EA = "EA";
+    public static String _LJ = "LJ";
+    public static String _SE = "SE";
+    public static String _UR = "UR";
+    public static String _AW = "AW";
+    public static String _SU = "SU";
 }

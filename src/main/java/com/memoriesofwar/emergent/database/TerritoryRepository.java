@@ -10,5 +10,9 @@ public interface TerritoryRepository extends CrudRepository<Territory, Long> {
 
     Territory findByName(String name);
 
-    List<Territory> findAllByFaction(Faction faction);
+    List<Territory> findByFaction(Faction faction);
+
+    Integer countByFaction(Faction faction);
+
+    List<Territory> findByCooldownGreaterThan(int cooldown);
 }

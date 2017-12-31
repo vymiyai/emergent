@@ -14,15 +14,20 @@ public class Faction {
 
     private String name;
 
+    private String acronym;
+
     public Faction() {}
 
-    public Faction(String name) {
+    public Faction(String name, String acronym) {
         this.name = name;
+        this.acronym = acronym;
     }
+
+    public Long getId() { return id; }
 
     public String getName() {
         return name;
     }
 
-    public Long getId() { return id; }
+    public String getAcronym() { return acronym; }
 }

@@ -24,7 +24,7 @@ public class TerritoryResource {
     @RequestMapping(method = RequestMethod.GET)
     public List<Territory> getTerritories() {
 
-        return overworld.getTerritories();
+        return (List<Territory>) overworld.getTerritoryRepository().findAll();
     }
 
     @RequestMapping(value = "/{name}", method = RequestMethod.GET)

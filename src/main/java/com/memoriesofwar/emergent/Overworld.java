@@ -1,9 +1,6 @@
 package com.memoriesofwar.emergent;
 
-import com.memoriesofwar.emergent.database.Faction;
-import com.memoriesofwar.emergent.database.FactionRepository;
-import com.memoriesofwar.emergent.database.Territory;
-import com.memoriesofwar.emergent.database.TerritoryRepository;
+import com.memoriesofwar.emergent.database.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.memoriesofwar.emergent.utils.Territories.*;
 import static com.memoriesofwar.emergent.utils.Factions.*;
+import static com.memoriesofwar.emergent.utils.Territories.*;
 
 @Component
 public class Overworld {
@@ -25,22 +22,24 @@ public class Overworld {
 
     private TerritoryRepository territoryRepository;
 
+    private BattleRepository battleRepository;
+
     public Overworld() {
     }
 
     @Autowired
-    public Overworld(FactionRepository factionRepository, TerritoryRepository territoryRepository) {
+    public Overworld(FactionRepository factionRepository, TerritoryRepository territoryRepository, BattleRepository battleRepository) {
 
         this.factionRepository = factionRepository;
         this.territoryRepository = territoryRepository;
+        this.battleRepository = battleRepository;
 
-
-        Faction se = new Faction(SE);
-        Faction ur = new Faction(UR);
-        Faction su = new Faction(SU);
-        Faction lj = new Faction(LJ);
-        Faction aw = new Faction(AW);
-        Faction ea = new Faction(EA);
+        Faction se = new Faction(SE, _SE);
+        Faction ur = new Faction(UR, _UR);
+        Faction su = new Faction(SU, _SU);
+        Faction lj = new Faction(LJ, _LJ);
+        Faction aw = new Faction(AW, _AW);
+        Faction ea = new Faction(EA, _EA);
         factions = Arrays.asList(se, ur, su, lj, aw, ea);
 
         Territory newZealand = new Territory(NEW_ZEALAND, ea, false, false);
@@ -502,14 +501,12 @@ public class Overworld {
         for(Territory territory : territories) {
             territoryRepository.save(territory);
         }
-    }
 
-    public List<Faction> getFactions() {
-        return factions;
-    }
+        Battle b1 = new Battle(japan, ur, se);
+        battleRepository.save(b1);
 
-    public List<Territory> getTerritories() {
-        return territories;
+        Battle b2 = new Battle(hawaii, se, ur);
+        battleRepository.save(b2);
     }
 
     public FactionRepository getFactionRepository() {
@@ -518,6 +515,10 @@ public class Overworld {
 
     public TerritoryRepository getTerritoryRepository() {
         return territoryRepository;
+    }
+
+    public BattleRepository getBattleRepository() {
+        return battleRepository;
     }
 
     @Override
