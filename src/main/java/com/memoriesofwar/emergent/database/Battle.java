@@ -66,6 +66,6 @@ public class Battle {
 
     @Override
     public String toString() {
-        return "(ATK) " + attacker.getAcronym() + " " + attackerBp + " x " + defenderBp + " " + defender.getAcronym() + " (DEF)";
+        return attacker.getAcronym() + " " + attackerBp + " -> " + defenderBp + " " + defender.getAcronym();
     }
 }

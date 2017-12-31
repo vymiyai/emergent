@@ -29,7 +29,6 @@ public class OverworldResource {
         this.overworld = overworld;
     }
 
-    @Scheduled(fixedRate = 1000)
     @Transactional
     @RequestMapping(method = RequestMethod.POST)
     public void resolve() {
@@ -60,14 +59,14 @@ public class OverworldResource {
             if(attackerBp <= 0) {
                 battle.getTerritory().setCooldown(Territory.MAX_COOLDOWN);
                 overworld.getBattleRepository().delete(battle);
-                return;
+                continue;
             }
 
             if(defenderBp <= 0) {
                 battle.getTerritory().setCooldown(Territory.MAX_COOLDOWN);
                 battle.getTerritory().setFaction(battle.getAttacker());
                 overworld.getBattleRepository().delete(battle);
-                return;
+                continue;
             }
 
             battle.setAttackerBp(attackerBp);

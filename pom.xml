@@ -11,6 +11,18 @@
         <version>1.5.9.RELEASE</version>
     </parent>
 
+    <repositories>
+        <!-- added for Discord4J -->
+        <repository> <!-- This repo fixes issues with transitive dependencies -->
+            <id>jcenter</id>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <properties>
         <java.version>1.8</java.version>
         <docker.image.prefix>darkagma</docker.image.prefix>
@@ -44,6 +56,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- added for Discord4J -->
+        <dependency>
+            <groupId>com.github.austinv11</groupId>
+            <artifactId>Discord4J</artifactId>
+            <version>2.9.3</version>
         </dependency>
     </dependencies>
 
