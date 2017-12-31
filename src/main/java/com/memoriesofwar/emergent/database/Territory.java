@@ -15,7 +15,7 @@ import java.util.List;
 public class Territory {
 
     @Transient
-    public static final int MAX_COOLDOWN = 30;
+    public static final int MAX_COOLDOWN = 40;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

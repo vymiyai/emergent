@@ -26,7 +26,7 @@ public class CommandHandler {
     private static final Logger log = LoggerFactory.getLogger(CommandHandler.class);
 
     private String botUserName = "Arenagma";
-    private String playingText = "playing MoW";
+    private String playingText = "March of Words";
 
     private String placeholder = "*resolving...*";
 

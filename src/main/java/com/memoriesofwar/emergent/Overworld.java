@@ -501,12 +501,6 @@ public class Overworld {
         for(Territory territory : territories) {
             territoryRepository.save(territory);
         }
-
-        Battle b1 = new Battle(japan, ur, se);
-        battleRepository.save(b1);
-
-        Battle b2 = new Battle(hawaii, se, ur);
-        battleRepository.save(b2);
     }
 
     public FactionRepository getFactionRepository() {

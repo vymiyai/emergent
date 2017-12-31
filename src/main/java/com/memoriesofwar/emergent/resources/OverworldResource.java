@@ -5,7 +5,6 @@ import com.memoriesofwar.emergent.database.Battle;
 import com.memoriesofwar.emergent.database.Faction;
 import com.memoriesofwar.emergent.database.Territory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,8 +41,7 @@ public class OverworldResource {
         List<Territory> territories = overworld.getTerritoryRepository().findByCooldownGreaterThan(0);
 
         for(Territory territory : territories)
-            if(territory.isOnCooldown())
-                territory.setCooldown(territory.getCooldown() - 1);
+            territory.setCooldown(territory.getCooldown() - 1);
     }
 
     private void resolveBattles() {
@@ -58,6 +56,7 @@ public class OverworldResource {
             // if both become 0 or negative at the same time, the defender wins.
             if(attackerBp <= 0) {
                 battle.getTerritory().setCooldown(Territory.MAX_COOLDOWN);
+                battle.getTerritory().setInBattle(false);
                 overworld.getBattleRepository().delete(battle);
                 continue;
             }
@@ -65,6 +64,7 @@ public class OverworldResource {
             if(defenderBp <= 0) {
                 battle.getTerritory().setCooldown(Territory.MAX_COOLDOWN);
                 battle.getTerritory().setFaction(battle.getAttacker());
+                battle.getTerritory().setInBattle(false);
                 overworld.getBattleRepository().delete(battle);
                 continue;
             }
@@ -82,21 +82,23 @@ public class OverworldResource {
             int numberOfOpenBattles = overworld.getBattleRepository().countByAttacker(faction);
             if(numberOfOpenBattles < MAX_NUMBER_OF_ATTACKING_BATTLES) {
                 int numberOfRolls = MAX_NUMBER_OF_ATTACKING_BATTLES - numberOfOpenBattles;
-                List<Territory> territories = getNeighboringTerritoriesNotOnCooldown(faction);
-                final int[] ints = new Random().ints(1, territories.size()).distinct().limit(numberOfRolls).toArray();
+                List<Territory> territories = getNeighboringFactionTerritories(faction);
+                final int[] ints = new Random().ints(0, territories.size()).distinct().limit(numberOfRolls).toArray();
 
                 for(int i : ints) {
                     Territory territory = territories.get(i);
                     Battle battle = new Battle(territories.get(i), faction, territory.getFaction());
                     overworld.getBattleRepository().save(battle);
+
+                    territory.setInBattle(true);
                 }
             }
         }
     }
 
-    private List<Territory> getNeighboringTerritoriesNotOnCooldown(Faction faction) {
+    private List<Territory> getNeighboringFactionTerritories(Faction faction) {
         return FactionResource.getNeighboringFactionTerritories(overworld.getTerritoryRepository(), faction)
-                .stream().filter(territory -> !territory.isOnCooldown())
+                .stream().filter(territory -> !territory.isOnCooldown() && !territory.isInBattle())
                 .collect(Collectors.toList());
     }
 
