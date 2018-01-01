@@ -4,6 +4,8 @@ import com.memoriesofwar.emergent.Overworld;
 import com.memoriesofwar.emergent.database.Battle;
 import com.memoriesofwar.emergent.database.Faction;
 import com.memoriesofwar.emergent.database.Territory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,11 +19,15 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/overworld")
 public class OverworldResource {
 
+    private static final Logger log = LoggerFactory.getLogger(OverworldResource.class);
+
     private Overworld overworld;
 
-    private final int MAX_DAMAGE = 5;
+    private final int MAX_DAMAGE = 10;
 
     private final int MAX_NUMBER_OF_ATTACKING_BATTLES = 3;
+
+    private long iteration = 0;
 
     @Autowired
     public OverworldResource(Overworld overworld) {
@@ -31,10 +37,11 @@ public class OverworldResource {
     @Transactional
     @RequestMapping(method = RequestMethod.POST)
     public void resolve() {
-
+        log.info("Starting iteration {}.", iteration);
         this.updateCooldown();
         this.resolveBattles();
         this.openBattles();
+        iteration++;
     }
 
     private void updateCooldown() {
@@ -83,7 +90,14 @@ public class OverworldResource {
             if(numberOfOpenBattles < MAX_NUMBER_OF_ATTACKING_BATTLES) {
                 int numberOfRolls = MAX_NUMBER_OF_ATTACKING_BATTLES - numberOfOpenBattles;
                 List<Territory> territories = getNeighboringFactionTerritories(faction);
-                final int[] ints = new Random().ints(0, territories.size()).distinct().limit(numberOfRolls).toArray();
+
+                if(territories.isEmpty())
+                    continue;
+
+                if(territories.size() < numberOfRolls)
+                    numberOfRolls = territories.size();
+
+                int[] ints = new Random().ints(0, territories.size()).distinct().limit(numberOfRolls).toArray();
 
                 for(int i : ints) {
                     Territory territory = territories.get(i);

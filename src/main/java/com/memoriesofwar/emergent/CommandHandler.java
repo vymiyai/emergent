@@ -79,7 +79,7 @@ public class CommandHandler {
     }
     */
 
-    @Scheduled(fixedRate = 1500)
+    @Scheduled(fixedRate = 2000)
     public void resolve() {
 
         if(stats == null)
@@ -100,13 +100,7 @@ public class CommandHandler {
         List<Battle> battles = (List<Battle>) battleRepository.findAll();
 
         for(Battle battle : battles)
-            result.append(battle.toString() + " - Battle for " + battle.getTerritory().getName() + "\n");
-
-        result.append("\nTerritories on cooldown:\n");
-        List<Territory> territoriesOnCooldown = territoryRepository.findByCooldownGreaterThan(0);
-
-        for(Territory territory : territoriesOnCooldown)
-            result.append(territory.getName() + " : " + territory.getCooldown() + "\n");
+            result.append(battle.toString() + " - " + battle.getTerritory().getName() + "\n");
 
         result.append("```");
 

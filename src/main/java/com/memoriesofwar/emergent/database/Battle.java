@@ -2,6 +2,10 @@ package com.memoriesofwar.emergent.database;
 
 import javax.persistence.*;
 
+import java.util.Arrays;
+
+import static java.lang.Math.ceil;
+
 @Entity
 public class Battle {
 
@@ -66,6 +70,34 @@ public class Battle {
 
     @Override
     public String toString() {
-        return attacker.getAcronym() + " " + attackerBp + " -> " + defenderBp + " " + defender.getAcronym();
+        return attacker.getAcronym() + " " + getAttackerBar() + " -> " + getDefenderBar() + " " + defender.getAcronym();
+    }
+
+    private String getAttackerBar() {
+        Double bars = ceil(attackerBp/5f);
+
+        char[] chars = new char[bars.intValue()];
+        Arrays.fill(chars, '=');
+        String bpLeft = new String(chars);
+
+        char[] paddingChars = new char[20 - bars.intValue()];
+        Arrays.fill(paddingChars, ' ');
+        String padding = new String(paddingChars);
+
+        return '|' + padding + bpLeft + '|';
+    }
+
+    private String getDefenderBar() {
+        Double bars = ceil(defenderBp/5f);
+
+        char[] chars = new char[bars.intValue()];
+        Arrays.fill(chars, '=');
+        String bpLeft = new String(chars);
+
+        char[] paddingChars = new char[20 - bars.intValue()];
+        Arrays.fill(paddingChars, ' ');
+        String padding = new String(paddingChars);
+
+        return '|' + bpLeft + padding + '|';
     }
 }
