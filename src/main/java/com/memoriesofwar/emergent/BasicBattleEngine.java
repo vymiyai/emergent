@@ -1,6 +1,6 @@
 package com.memoriesofwar.emergent;
 
-import com.memoriesofwar.emergent.units.BasicUnit;
+import com.memoriesofwar.emergent.entities.Unit;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -9,7 +9,7 @@ import java.util.Random;
 
 @Component
 public class BasicBattleEngine {
-    public void resolve(List<BasicUnit> attackers, List<BasicUnit> defenders) {
+    public void resolve(List<Unit> attackers, List<Unit> defenders) {
         // do damage calculations.
         resolveBelligerent(attackers, defenders);
         resolveBelligerent(defenders, attackers);
@@ -23,18 +23,19 @@ public class BasicBattleEngine {
         resetDefense(defenders);
     }
 
-    private void resolveBelligerent(List<BasicUnit> attackers, List<BasicUnit> defenders) {
+    private void resolveBelligerent(List<Unit> attackers, List<Unit> defenders) {
         Random random = new Random();
 
         if (defenders.size() == 0)
             return;
 
-        for (BasicUnit attacker : attackers) {
-            BasicUnit target;
+        for (Unit attacker : attackers) {
+            Unit target;
             do {
                 target = defenders.get(random.nextInt(defenders.size()));
 
-                int damage = attacker.getAttack() - target.getDefense();
+                Float absoluteDamage = attacker.getAttack() * attacker.getDamageMultiplierByTargetName(target.getName());
+                int damage = absoluteDamage.intValue() - target.getDefense();
 
                 if (damage <= 0)
                     target.setDefense(0);
@@ -45,14 +46,14 @@ public class BasicBattleEngine {
         }
     }
 
-    private void removeDeadUnits(List<BasicUnit> units) {
-        for(Iterator<BasicUnit> iterator = units.iterator(); iterator.hasNext();)
+    private void removeDeadUnits(List<Unit> units) {
+        for(Iterator<Unit> iterator = units.iterator(); iterator.hasNext();)
             if (iterator.next().getHp() <= 0)
                 iterator.remove();
     }
 
-    private void resetDefense(List<BasicUnit> units) {
-        for (BasicUnit unit : units)
+    private void resetDefense(List<Unit> units) {
+        for (Unit unit : units)
             unit.setDefense(unit.getMaxDefense());
     }
 }

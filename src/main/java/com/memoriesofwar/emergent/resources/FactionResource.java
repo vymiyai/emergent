@@ -1,9 +1,9 @@
 package com.memoriesofwar.emergent.resources;
 
 import com.memoriesofwar.emergent.Overworld;
-import com.memoriesofwar.emergent.database.Faction;
-import com.memoriesofwar.emergent.database.Territory;
-import com.memoriesofwar.emergent.database.TerritoryRepository;
+import com.memoriesofwar.emergent.entities.Faction;
+import com.memoriesofwar.emergent.entities.Territory;
+import com.memoriesofwar.emergent.repositories.TerritoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

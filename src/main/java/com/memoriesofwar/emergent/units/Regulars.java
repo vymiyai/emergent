@@ -1,7 +1,10 @@
 package com.memoriesofwar.emergent.units;
 
-public class Regulars extends BasicUnit {
-    public Regulars() {
-        super("Regulars", 150, 25, 1000, null);
+import com.memoriesofwar.emergent.entities.Player;
+import com.memoriesofwar.emergent.entities.Unit;
+
+public class Regulars extends Unit {
+    public Regulars(Player player) {
+        super("Regulars", 150, 25, 1000, player,null, null);
     }
 }

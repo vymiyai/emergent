@@ -1,9 +1,9 @@
 package com.memoriesofwar.emergent.resources;
 
 import com.memoriesofwar.emergent.Overworld;
-import com.memoriesofwar.emergent.database.Battle;
-import com.memoriesofwar.emergent.database.Faction;
-import com.memoriesofwar.emergent.database.Territory;
+import com.memoriesofwar.emergent.entities.Battle;
+import com.memoriesofwar.emergent.entities.Faction;
+import com.memoriesofwar.emergent.entities.Territory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

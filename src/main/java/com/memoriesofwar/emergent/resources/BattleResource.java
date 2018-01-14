@@ -1,8 +1,8 @@
 package com.memoriesofwar.emergent.resources;
 
 import com.memoriesofwar.emergent.Overworld;
-import com.memoriesofwar.emergent.database.Battle;
-import com.memoriesofwar.emergent.database.Faction;
+import com.memoriesofwar.emergent.entities.Battle;
+import com.memoriesofwar.emergent.entities.Faction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

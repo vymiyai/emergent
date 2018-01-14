@@ -1,9 +1,18 @@
 package com.memoriesofwar.emergent;
 
-import com.memoriesofwar.emergent.database.*;
+import com.memoriesofwar.emergent.entities.Faction;
+import com.memoriesofwar.emergent.entities.Player;
+import com.memoriesofwar.emergent.entities.Territory;
+import com.memoriesofwar.emergent.entities.Unit;
+import com.memoriesofwar.emergent.repositories.*;
+import com.memoriesofwar.emergent.units.ATRifles;
+import com.memoriesofwar.emergent.units.LightTank;
+import com.memoriesofwar.emergent.units.Recruits;
+import com.memoriesofwar.emergent.units.Regulars;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -501,6 +510,40 @@ public class Overworld {
         for(Territory territory : territories) {
             territoryRepository.save(territory);
         }
+
+        List<Unit> attackers = new ArrayList<>();
+        attackers.add(new Recruits(null));
+        attackers.add(new Recruits(null));
+        attackers.add(new Recruits(null));
+        attackers.add(new Recruits(null));
+        attackers.add(new Recruits(null));
+        attackers.add(new Recruits(null));
+        attackers.add(new Recruits(null));
+        attackers.add(new ATRifles(null));
+        attackers.add(new ATRifles(null));
+        attackers.add(new ATRifles(null));
+        attackers.add(new Regulars(null));
+        attackers.add(new Regulars(null));
+        attackers.add(new LightTank(null));
+
+        List<Unit>  defenders = new ArrayList<>();
+        defenders.add(new Recruits(null));
+        defenders.add(new Recruits(null));
+        defenders.add(new Recruits(null));
+        defenders.add(new Recruits(null));
+        defenders.add(new Recruits(null));
+        defenders.add(new Recruits(null));
+        defenders.add(new Recruits(null));
+        defenders.add(new ATRifles(null));
+        defenders.add(new ATRifles(null));
+        defenders.add(new ATRifles(null));
+        defenders.add(new Regulars(null));
+        defenders.add(new Regulars(null));
+        defenders.add(new LightTank(null));
+
+
+
+
     }
 
     public FactionRepository getFactionRepository() {

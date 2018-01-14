@@ -1,5 +1,7 @@
-package com.memoriesofwar.emergent.database;
+package com.memoriesofwar.emergent.repositories;
 
+import com.memoriesofwar.emergent.entities.Battle;
+import com.memoriesofwar.emergent.entities.Faction;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

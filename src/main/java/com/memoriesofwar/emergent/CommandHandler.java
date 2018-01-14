@@ -1,6 +1,10 @@
 package com.memoriesofwar.emergent;
 
-import com.memoriesofwar.emergent.database.*;
+import com.memoriesofwar.emergent.commands.IBotCommand;
+import com.memoriesofwar.emergent.entities.Battle;
+import com.memoriesofwar.emergent.entities.Faction;
+import com.memoriesofwar.emergent.entities.Unit;
+import com.memoriesofwar.emergent.repositories.*;
 import com.memoriesofwar.emergent.resources.OverworldResource;
 import com.memoriesofwar.emergent.units.*;
 import org.slf4j.Logger;
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Component;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
@@ -50,11 +55,30 @@ public class CommandHandler {
     @Autowired
     private BasicBattleEngine basicBattleEngine;
 
-    private List<BasicUnit> attackers;
-    private List<BasicUnit> defenders;
+    private List<Unit> attackers;
+    private List<Unit> defenders;
 
+    private int round = 0;
 
-    /*
+    private HashMap<String, IBotCommand> basicCommands;
+
+    @Autowired
+    public void setBasicCommands(List<IBotCommand> injectedBasicCommands) {
+        this.basicCommands = new HashMap<String, IBotCommand>();
+
+        for (IBotCommand command : injectedBasicCommands)
+            this.basicCommands.put(command.getCommandName(), command);
+    }
+
+    private String[] tokenize(String messageString) {
+
+        return messageString.split(" ");
+    }
+
+    private boolean isDefinedCommand(String commandToken) {
+        return this.basicCommands.containsKey(commandToken);
+    }
+
     @EventSubscriber
     public void onMessageReceived(MessageReceivedEvent event) {
 
@@ -70,29 +94,7 @@ public class CommandHandler {
         // do nothing if there is no command match.
     }
 
-    @EventSubscriber
-    public void onUserJoined(UserJoinEvent event) {
-        IUser user = event.getUser();
-        IRole selectFaction = event.getGuild().getRolesByName("Select Faction").get(0);
-        user.addRole(selectFaction);
-
-        String response = String.format(this.getWelcomeMessage(), user.mention());
-
-        try {
-            event.getGuild().getGeneralChannel().sendMessage(response);
-        } catch (DiscordException e) {
-            log.error(this.errorMessage, e);
-        }
-    }
-    */
-
-    @Scheduled(fixedRate = 2000)
-    public void resolve() {
-
-        if(stats == null)
-            return;
-
-        /*
+    private String resolveOverworld() {
         overworldResource.resolve();
 
         StringBuilder result = new StringBuilder();
@@ -111,36 +113,40 @@ public class CommandHandler {
             result.append(battle.toString() + " - " + battle.getTerritory().getName() + "\n");
 
         result.append("```");
-        */
+        return result.toString();
+    }
+
+    @Scheduled(fixedRate = 2000)
+    public void resolve() {
+
+        if(stats == null)
+            return;
+
+        //String overworldStatus = this.resolveOverworld();
 
         StringBuilder result = new StringBuilder();
+        result.append("*resolving...*");
+        /*
+        result.append("Round " + round + "\n\n");
         result.append("Attackers: \n\n");
-        for(BasicUnit unit : attackers)
+        for(Unit unit : attackers)
             result.append(unit + "\n");
 
         result.append("\n\n");
         result.append("Defenders: \n\n");
-        for(BasicUnit unit : defenders)
+        for(Unit unit : defenders)
             result.append(unit + "\n");
 
         basicBattleEngine.resolve(attackers, defenders);
 
+        if(attackers.size() != 0 && defenders.size() != 0)
+            round++;
+*/
         stats.edit(result.toString());
     }
 
     @EventSubscriber
     public void onSelfJoined(ReadyEvent event) {
-
-        this.attackers = new ArrayList<>();
-        //attackers.add(new ATRifles());
-        attackers.add(new Recruits());
-        attackers.add(new Recruits());
-        attackers.add(new Recruits());
-        attackers.add(new Recruits());
-
-        this.defenders = new ArrayList<>();
-        //defenders.add(new LightTank());
-        defenders.add(new Regulars());
 
         event.getClient().getGuilds().forEach((guild) -> {
             try {

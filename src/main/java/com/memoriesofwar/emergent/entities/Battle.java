@@ -1,4 +1,4 @@
-package com.memoriesofwar.emergent.database;
+package com.memoriesofwar.emergent.entities;
 
 import javax.persistence.*;
 

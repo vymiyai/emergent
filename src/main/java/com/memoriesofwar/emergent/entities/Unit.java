@@ -1,11 +1,17 @@
-package com.memoriesofwar.emergent.units;
+package com.memoriesofwar.emergent.entities;
 
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
-public class BasicUnit {
+@Entity
+public class Unit {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
     private int attack;
@@ -13,16 +19,34 @@ public class BasicUnit {
     private int maxDefense;
     private int hp;
     private int maxHp;
+
+    @ManyToOne
+    private Player player;
+
+    @ElementCollection
+    @MapKeyColumn(name="key")
+    @Column(name="value")
+    @CollectionTable(name="rapid_fire", joinColumns=@JoinColumn(name="rapid_fire_id"))
     protected Map<String, Integer> rapidFire;
 
-    public BasicUnit(String name, int attack, int defense, int maxHp, Map<String, Integer> rapidFire) {
+    @ElementCollection
+    @MapKeyColumn(name="key")
+    @Column(name="value")
+    @CollectionTable(name="damage_multipliers", joinColumns=@JoinColumn(name="damage_multiplier_id"))
+    protected Map<String, Float> damageMultipliers;
+
+    public Unit(){}
+
+    public Unit(String name, int attack, int defense, int maxHp, Player player, Map<String, Integer> rapidFire, Map<String, Float> damageMultipliers) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
         this.maxDefense = defense;
         this.hp = maxHp;
         this.maxHp = maxHp;
+        this.player = player;
         this.rapidFire = Optional.ofNullable(rapidFire).orElse(new HashMap<>());
+        this.damageMultipliers = Optional.ofNullable(damageMultipliers).orElse(new HashMap<>());
     }
 
     public String getName() {
@@ -49,16 +73,26 @@ public class BasicUnit {
         return maxHp;
     }
 
-    public void setDefense(int defense) {
-        this.defense = defense;
+    public Map<String, Integer> getRapidFire() {
+        return rapidFire;
+    }
+
+    public Map<String, Float> getDamageMultipliers() { return damageMultipliers; }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public void setHp(int hp) {
         this.hp = hp;
     }
 
-    public Map<String, Integer> getRapidFire() {
-        return rapidFire;
+    public void setDefense(int defense) {
+        this.defense = defense;
     }
 
     public boolean isRapidFireTriggered(String name) {
@@ -72,6 +106,13 @@ public class BasicUnit {
             return true;
         else
             return false;
+    }
+
+    public Float getDamageMultiplierByTargetName(String name) {
+        if(damageMultipliers.containsKey(name))
+            return damageMultipliers.get(name);
+        else
+            return 1f;
     }
 
     @Override
