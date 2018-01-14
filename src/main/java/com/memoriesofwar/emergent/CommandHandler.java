@@ -2,6 +2,7 @@ package com.memoriesofwar.emergent;
 
 import com.memoriesofwar.emergent.database.*;
 import com.memoriesofwar.emergent.resources.OverworldResource;
+import com.memoriesofwar.emergent.units.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Component;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.impl.obj.Channel;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
@@ -46,6 +46,13 @@ public class CommandHandler {
 
     @Autowired
     private OverworldResource overworldResource;
+
+    @Autowired
+    private BasicBattleEngine basicBattleEngine;
+
+    private List<BasicUnit> attackers;
+    private List<BasicUnit> defenders;
+
 
     /*
     @EventSubscriber
@@ -85,6 +92,7 @@ public class CommandHandler {
         if(stats == null)
             return;
 
+        /*
         overworldResource.resolve();
 
         StringBuilder result = new StringBuilder();
@@ -103,12 +111,36 @@ public class CommandHandler {
             result.append(battle.toString() + " - " + battle.getTerritory().getName() + "\n");
 
         result.append("```");
+        */
+
+        StringBuilder result = new StringBuilder();
+        result.append("Attackers: \n\n");
+        for(BasicUnit unit : attackers)
+            result.append(unit + "\n");
+
+        result.append("\n\n");
+        result.append("Defenders: \n\n");
+        for(BasicUnit unit : defenders)
+            result.append(unit + "\n");
+
+        basicBattleEngine.resolve(attackers, defenders);
 
         stats.edit(result.toString());
     }
 
     @EventSubscriber
     public void onSelfJoined(ReadyEvent event) {
+
+        this.attackers = new ArrayList<>();
+        //attackers.add(new ATRifles());
+        attackers.add(new Recruits());
+        attackers.add(new Recruits());
+        attackers.add(new Recruits());
+        attackers.add(new Recruits());
+
+        this.defenders = new ArrayList<>();
+        //defenders.add(new LightTank());
+        defenders.add(new Regulars());
 
         event.getClient().getGuilds().forEach((guild) -> {
             try {
@@ -121,6 +153,7 @@ public class CommandHandler {
                 List<IChannel> channels = guild.getChannelsByName(targetChannel);
 
                 for(IChannel channel : channels) {
+                    channel.bulkDelete();
                     stats = channel.sendMessage(placeholder);
                 }
 
