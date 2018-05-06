@@ -1,9 +1,10 @@
 package com.memoriesofwar.emergent.resources;
 
+import com.memoriesofwar.emergent.BasicBattleEngine;
 import com.memoriesofwar.emergent.Overworld;
-import com.memoriesofwar.emergent.entities.Battle;
-import com.memoriesofwar.emergent.entities.Faction;
-import com.memoriesofwar.emergent.entities.Territory;
+import com.memoriesofwar.emergent.entities.*;
+import com.memoriesofwar.emergent.repositories.BattalionRepository;
+import com.memoriesofwar.emergent.repositories.UnitRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class OverworldResource {
 
     private Overworld overworld;
 
+    private BasicBattleEngine basicBattleEngine;
+
     private final int MAX_DAMAGE = 10;
 
     private final int MAX_NUMBER_OF_ATTACKING_BATTLES = 3;
@@ -30,8 +33,9 @@ public class OverworldResource {
     private long iteration = 0;
 
     @Autowired
-    public OverworldResource(Overworld overworld) {
+    public OverworldResource(Overworld overworld, BasicBattleEngine basicBattleEngine) {
         this.overworld = overworld;
+        this.basicBattleEngine = basicBattleEngine;
     }
 
     @Transactional
@@ -40,7 +44,7 @@ public class OverworldResource {
         log.info("Starting iteration {}.", iteration);
         this.updateCooldown();
         this.resolveBattles();
-        this.openBattles();
+        //this.openBattles();
         iteration++;
     }
 
@@ -51,15 +55,58 @@ public class OverworldResource {
             territory.setCooldown(territory.getCooldown() - 1);
     }
 
+    private ArrayList<Unit> removeDeadUnits(List<Unit> units) {
+        ArrayList<Unit> deadUnits = new ArrayList<>();
+        for(Iterator<Unit> iterator = units.iterator(); iterator.hasNext();) {
+            Unit unit = iterator.next();
+            if (unit.getHp() <= 0) {
+                deadUnits.add(unit);
+                iterator.remove();
+            }
+        }
+
+        return deadUnits;
+    }
+
     private void resolveBattles() {
         List<Battle> battles = (List<Battle>) overworld.getBattleRepository().findAll();
 
         Random random = new Random();
 
         for(Battle battle : battles) {
+            List<Battalion> battalions = overworld.getBattalionRepository().findByCurrentLocation(battle.getTerritory());
+            List<Unit> attackers = battalions
+                    .stream()
+                    .filter(battalion -> battalion.getPlayer().getFaction().equals(battle.getAttacker()))
+                    .map(battalion -> battalion.getUnits())
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+
+            List<Unit> defenders = battalions
+                    .stream()
+                    .filter(battalion -> battalion.getPlayer().getFaction().equals(battle.getDefender()))
+                    .map(battalion -> battalion.getUnits())
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+
+            basicBattleEngine.resolve(attackers, defenders);
+            /*
+
+            manage individual battalion unit removal.
+
+             */
+
+            ArrayList<Unit> deadUnits = removeDeadUnits(attackers);
+            deadUnits.addAll(removeDeadUnits(defenders));
+
+            overworld.getUnitRepository().delete(deadUnits);
+
+            int attackerBp = battle.getAttackerBp();
+            int defenderBp = battle.getDefenderBp();
+/*
             int attackerBp = battle.getAttackerBp() - (random.nextInt(MAX_DAMAGE) + 1);
             int defenderBp = battle.getDefenderBp() - (random.nextInt(MAX_DAMAGE) + 1);
-
+*/
             // if both become 0 or negative at the same time, the defender wins.
             if(attackerBp <= 0) {
                 battle.getTerritory().setCooldown(Territory.MAX_COOLDOWN);

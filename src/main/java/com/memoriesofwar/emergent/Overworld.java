@@ -1,19 +1,15 @@
 package com.memoriesofwar.emergent;
 
-import com.memoriesofwar.emergent.entities.Faction;
-import com.memoriesofwar.emergent.entities.Player;
-import com.memoriesofwar.emergent.entities.Territory;
-import com.memoriesofwar.emergent.entities.Unit;
+import com.koloboke.collect.impl.hash.Hash;
+import com.memoriesofwar.emergent.entities.*;
 import com.memoriesofwar.emergent.repositories.*;
-import com.memoriesofwar.emergent.units.ATRifles;
-import com.memoriesofwar.emergent.units.LightTank;
-import com.memoriesofwar.emergent.units.Recruits;
-import com.memoriesofwar.emergent.units.Regulars;
+import com.memoriesofwar.emergent.units.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,15 +29,24 @@ public class Overworld {
 
     private BattleRepository battleRepository;
 
+    private BattalionRepository battalionRepository;
+
+    private UnitRepository unitRepository;
+
+    private PlayerRepository playerRepository;
+
     public Overworld() {
     }
 
     @Autowired
-    public Overworld(FactionRepository factionRepository, TerritoryRepository territoryRepository, BattleRepository battleRepository) {
+    public Overworld(FactionRepository factionRepository, TerritoryRepository territoryRepository, BattleRepository battleRepository, UnitRepository unitRepository, PlayerRepository playerRepository, BattalionRepository battalionRepository) {
 
         this.factionRepository = factionRepository;
         this.territoryRepository = territoryRepository;
         this.battleRepository = battleRepository;
+        this.unitRepository = unitRepository;
+        this.playerRepository = playerRepository;
+        this.battalionRepository = battalionRepository;
 
         Faction se = new Faction(SE, _SE);
         Faction ur = new Faction(UR, _UR);
@@ -201,166 +206,166 @@ public class Overworld {
         Territory caribbean = new Territory(CARIBBEAN, lj, false, false);
 
         territories = Arrays.asList(
-            newZealand,
-            eastAustralia,
-            westAustralia,
-            benelux,
-            iceland,
-            ireland,
-            scotland,
-            england,
-            northernFrance,
-            southernFrance,
-            spain,
-            portugal,
-            italy,
-            westernGermany,
-            easternGermany,
-            denmark,
-            norway,
-            sweden,
-            finland,
-            balticStates,
-            poland,
-            austriaHungary,
-            balkan,
-            greece,
-            southEastEurope,
+                newZealand,
+                eastAustralia,
+                westAustralia,
+                benelux,
+                iceland,
+                ireland,
+                scotland,
+                england,
+                northernFrance,
+                southernFrance,
+                spain,
+                portugal,
+                italy,
+                westernGermany,
+                easternGermany,
+                denmark,
+                norway,
+                sweden,
+                finland,
+                balticStates,
+                poland,
+                austriaHungary,
+                balkan,
+                greece,
+                southEastEurope,
 
-            japan,
-            korea,
-            beijing,
-            bangladesh,
-            papuaNewGuinea,
-            timor,
-            indonesia,
-            thailand,
-            borneo,
-            sulawesi,
-            malaysia,
-            singapore,
-            philippines,
-            burma,
-            vietnam,
-            nepal,
-            india,
-            sriLanka,
-            himalayas,
-            southEastChina,
-            taiwan,
-            centralChina,
-            shanghai,
-            mongolia,
+                japan,
+                korea,
+                beijing,
+                bangladesh,
+                papuaNewGuinea,
+                timor,
+                indonesia,
+                thailand,
+                borneo,
+                sulawesi,
+                malaysia,
+                singapore,
+                philippines,
+                burma,
+                vietnam,
+                nepal,
+                india,
+                sriLanka,
+                himalayas,
+                southEastChina,
+                taiwan,
+                centralChina,
+                shanghai,
+                mongolia,
 
-            kamchatka,
-            westMagadan,
-            eastMagadan,
-            stPetersburg,
-            ukraine,
-            belarus,
-            moscow,
-            arkhangelsk,
-            northCaucasus,
-            northUrals,
-            centralUrals,
-            westKazakhstan,
-            eastKazakhstan,
-            karakum,
-            tianShan,
-            southernSiberia,
-            eastSiberia,
-            westSiberia,
-            northernSiberia,
-            yakutsk,
-            transBaikal,
-            sakha,
-            khabarovsk,
+                kamchatka,
+                westMagadan,
+                eastMagadan,
+                stPetersburg,
+                ukraine,
+                belarus,
+                moscow,
+                arkhangelsk,
+                northCaucasus,
+                northUrals,
+                centralUrals,
+                westKazakhstan,
+                eastKazakhstan,
+                karakum,
+                tianShan,
+                southernSiberia,
+                eastSiberia,
+                westSiberia,
+                northernSiberia,
+                yakutsk,
+                transBaikal,
+                sakha,
+                khabarovsk,
 
-            hawaii,
-            midAtlantic,
-            pacificSouthwest,
-            pacificNorthwest,
-            southernPlains,
-            gulfCoast,
-            coastalSoutheast,
-            appalachianBasin,
-            westernInterior,
-            coloradoPlateau,
-            northernRockies,
-            northernPlains,
-            greatLakes,
-            newEngland,
-            quebec,
-            newfoundland,
-            greenland,
-            ontario,
-            manitoba,
-            alberta,
-            britishColumbia,
-            canadianArctic,
-            yukon,
-            alaska,
+                hawaii,
+                midAtlantic,
+                pacificSouthwest,
+                pacificNorthwest,
+                southernPlains,
+                gulfCoast,
+                coastalSoutheast,
+                appalachianBasin,
+                westernInterior,
+                coloradoPlateau,
+                northernRockies,
+                northernPlains,
+                greatLakes,
+                newEngland,
+                quebec,
+                newfoundland,
+                greenland,
+                ontario,
+                manitoba,
+                alberta,
+                britishColumbia,
+                canadianArctic,
+                yukon,
+                alaska,
 
-            westCongo,
-            centralCongo,
-            madagascar,
-            southAfrica,
-            namibia,
-            rhodesia,
-            mozambique,
-            ivoryCoast,
-            somalia,
-            sudan,
-            kenya,
-            centralAfrica,
-            nigeria,
-            westAfrica,
-            morocco,
-            algeria,
-            libya,
-            egypt,
-            middleEast,
-            arabia,
-            turkey,
-            southCaucasus,
-            persia,
-            afghanistan,
+                westCongo,
+                centralCongo,
+                madagascar,
+                southAfrica,
+                namibia,
+                rhodesia,
+                mozambique,
+                ivoryCoast,
+                somalia,
+                sudan,
+                kenya,
+                centralAfrica,
+                nigeria,
+                westAfrica,
+                morocco,
+                algeria,
+                libya,
+                egypt,
+                middleEast,
+                arabia,
+                turkey,
+                southCaucasus,
+                persia,
+                afghanistan,
 
-            saoPaulo,
-            chile,
-            malvinas,
-            fireland,
-            patagonia,
-            buenosAires,
-            uruguay,
-            paraguay,
-            brasilia,
-            rioDeJaneiro,
-            recife,
-            amazonia,
-            peru,
-            colombia,
-            ecuador,
-            venezuela,
-            bolivia,
-            guyana,
-            centralAmerica,
-            southMexico,
-            northMexico,
-            cuba,
-            caribbean);
+                saoPaulo,
+                chile,
+                malvinas,
+                fireland,
+                patagonia,
+                buenosAires,
+                uruguay,
+                paraguay,
+                brasilia,
+                rioDeJaneiro,
+                recife,
+                amazonia,
+                peru,
+                colombia,
+                ecuador,
+                venezuela,
+                bolivia,
+                guyana,
+                centralAmerica,
+                southMexico,
+                northMexico,
+                cuba,
+                caribbean);
 
-        for(Faction faction : factions) {
+        for (Faction faction : factions) {
             factionRepository.save(faction);
         }
 
-        for(Territory territory : territories) {
+        for (Territory territory : territories) {
             territoryRepository.save(territory);
         }
 
         newZealand.setLinks(eastAustralia);
         eastAustralia.setLinks(westAustralia, newZealand, papuaNewGuinea, chile, midAtlantic, westMagadan, bangladesh, benelux, saoPaulo, westCongo);
-        westAustralia.setLinks(eastAustralia,timor);
+        westAustralia.setLinks(eastAustralia, timor);
         iceland.setLinks(greenland, scotland, ireland);
         scotland.setLinks(iceland, ireland, england, norway);
         ireland.setLinks(iceland, england, scotland);
@@ -507,43 +512,29 @@ public class Overworld {
         belarus.setLinks(stPetersburg, balticStates, poland, ukraine, moscow);
         ukraine.setLinks(belarus, poland, austriaHungary, southEastEurope, northCaucasus, moscow);
 
-        for(Territory territory : territories) {
+        for (Territory territory : territories) {
             territoryRepository.save(territory);
         }
 
-        List<Unit> attackers = new ArrayList<>();
-        attackers.add(new Recruits(null));
-        attackers.add(new Recruits(null));
-        attackers.add(new Recruits(null));
-        attackers.add(new Recruits(null));
-        attackers.add(new Recruits(null));
-        attackers.add(new Recruits(null));
-        attackers.add(new Recruits(null));
-        attackers.add(new ATRifles(null));
-        attackers.add(new ATRifles(null));
-        attackers.add(new ATRifles(null));
-        attackers.add(new Regulars(null));
-        attackers.add(new Regulars(null));
-        attackers.add(new LightTank(null));
+        this.initializeGohouIchiu();
+    }
 
-        List<Unit>  defenders = new ArrayList<>();
-        defenders.add(new Recruits(null));
-        defenders.add(new Recruits(null));
-        defenders.add(new Recruits(null));
-        defenders.add(new Recruits(null));
-        defenders.add(new Recruits(null));
-        defenders.add(new Recruits(null));
-        defenders.add(new Recruits(null));
-        defenders.add(new ATRifles(null));
-        defenders.add(new ATRifles(null));
-        defenders.add(new ATRifles(null));
-        defenders.add(new Regulars(null));
-        defenders.add(new Regulars(null));
-        defenders.add(new LightTank(null));
+    private void initializeGohouIchiu() {
+        Faction gohouIchiu = new Faction("Gohou Ichiu", "GI");
+        factionRepository.save(gohouIchiu);
 
+        Player overseer = new Player(666l, gohouIchiu);
+        playerRepository.save(overseer);
 
+        Territory nexus = new Territory("Nexus", gohouIchiu, false, false);
+        territoryRepository.save(nexus);
 
+        Unit mp = MilitaryPolice.instantiateFor(overseer);
+        unitRepository.save(mp);
 
+        Battalion enemyBattalion = new Battalion(overseer, (ArrayList<Unit>) Arrays.asList(mp));
+        enemyBattalion.setCurrentLocation(nexus);
+        battalionRepository.save(enemyBattalion);
     }
 
     public FactionRepository getFactionRepository() {
@@ -556,6 +547,18 @@ public class Overworld {
 
     public BattleRepository getBattleRepository() {
         return battleRepository;
+    }
+
+    public BattalionRepository getBattalionRepository() {
+        return battalionRepository;
+    }
+
+    public UnitRepository getUnitRepository() {
+        return unitRepository;
+    }
+
+    public PlayerRepository getPlayerRepository() {
+        return playerRepository;
     }
 
     @Override

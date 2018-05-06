@@ -2,7 +2,6 @@ package com.memoriesofwar.emergent.entities;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Entity
@@ -20,22 +19,55 @@ public class Battalion {
     @ManyToOne
     private Territory currentLocation;
 
-    @OneToMany
-    private List<Unit> units;
+    @OneToMany(orphanRemoval = true)
+    private ArrayList<Unit> units;
+
+    private boolean inReserve = true;
 
     public Battalion(){}
 
-    public Battalion(Player player, List<Unit> units) {
+    public Battalion(Player player, ArrayList<Unit> units) {
         this.player = player;
         this.units = Optional.ofNullable(units).orElse(new ArrayList<>());
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public ArrayList<Unit> getUnits() {
+        return units;
+    }
+
+    public Territory getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Territory currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public boolean isInReserve() {
+        return inReserve;
+    }
+
+    public void setInReserve(boolean inReserve) {
+        this.inReserve = inReserve;
+    }
+
     @Override
     public String toString() {
+        final String location;
+        if(currentLocation == null)
+            location = "unknown location";
+        else
+            location = currentLocation.getName();
+
         StringBuilder result = new StringBuilder();
-        result.append("Battalion " + id + ":\n");
+        result.append("Battalion " + id + " [stationed in " + location + "]:\n");
+
         for (Unit unit : units)
-            result.append(unit.toString() + "\n");
+            result.append("  " + unit.toString() + "\n");
 
         return result.toString();
     }

@@ -21,6 +21,7 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +52,9 @@ public class CommandHandler {
 
     @Autowired
     private OverworldResource overworldResource;
+
+    @Autowired
+    private BattalionRepository battalionRepository;
 
     @Autowired
     private BasicBattleEngine basicBattleEngine;
@@ -122,11 +126,15 @@ public class CommandHandler {
         if(stats == null)
             return;
 
-        //String overworldStatus = this.resolveOverworld();
+        String overworldStatus = this.resolveOverworld();
+        stats.edit(overworldStatus);
 
+
+
+/*
         StringBuilder result = new StringBuilder();
-        result.append("*resolving...*");
-        /*
+        //result.append("*resolving...*");
+
         result.append("Round " + round + "\n\n");
         result.append("Attackers: \n\n");
         for(Unit unit : attackers)
@@ -141,8 +149,9 @@ public class CommandHandler {
 
         if(attackers.size() != 0 && defenders.size() != 0)
             round++;
-*/
+
         stats.edit(result.toString());
+        */
     }
 
     @EventSubscriber

@@ -3,20 +3,22 @@ package com.memoriesofwar.emergent;
 import com.memoriesofwar.emergent.entities.Unit;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 @Component
 public class BasicBattleEngine {
+    @Transactional
     public void resolve(List<Unit> attackers, List<Unit> defenders) {
         // do damage calculations.
         resolveBelligerent(attackers, defenders);
         resolveBelligerent(defenders, attackers);
 
         // remove units with hp 0.
-        removeDeadUnits(attackers);
-        removeDeadUnits(defenders);
+        //removeDeadUnits(attackers);
+        //removeDeadUnits(defenders);
 
         // reset integrity.
         resetDefense(attackers);
